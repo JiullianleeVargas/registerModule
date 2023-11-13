@@ -2,6 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const user = express();
 module.exports = user;
+// const { MongoClient } = require('mongodb');
 
 function writeTo(file, data) {
   fs.writeFile(file, JSON.stringify(data), "utf8", (err) => {
@@ -21,9 +22,10 @@ function readFrom(file) {
 // Function to check if an email exists in the users array
 
 user.use(express.json());
+
 user.post('/register', async (req, res) => {
 
-  //const client = new MongoClient('mongodb://localhost:27017');
+  // const client = new MongoClient('mongodb://localhost:27017');
 
   try {
 
@@ -39,7 +41,9 @@ user.post('/register', async (req, res) => {
       {
             // client.connect();
             // const database = client.db('test');
-            // const usersCollection = database.collection('users');o
+            // const usersCollection = database.collection('users');
+
+            // const user = await usersCollection.findOne({email});
             const file = "./users.json";
             // const user = await usersCollection.findOne({ email });
             let data = readFrom(file)
@@ -52,7 +56,10 @@ user.post('/register', async (req, res) => {
             
             
             console.log(isEmailRegistered(email))
+
             if (isEmailRegistered(email)) {
+           
+            // if (user) {
                 //if user found, cookie message = username/email already exists
                 res.send('Email already exists!');
                 //res.cookie('message', 'Email already exists!');
@@ -67,6 +74,7 @@ user.post('/register', async (req, res) => {
                 data.push(newUser);
 
                 // Write the updated data back to the file
+                // await usersCollection.insertOne(user);
                 writeTo(file, data, res);
                 res.send('Account created!');
             }
@@ -83,8 +91,8 @@ user.post('/register', async (req, res) => {
   } catch (err) {
       res.send(err);
       //console.error(err);
-   } //finally {
-      //await client.close();
-  //}
+  } //finally {
+      // await client.close();
+  // }
 
 })
