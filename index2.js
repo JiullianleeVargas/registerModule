@@ -1,28 +1,17 @@
+//Install express, body-parser, node, mongodb, and bcrypt for this code
+
+//Initialize Express and Body Parser, as well as the route we shall use
+//Initialize the userController
 const express = require("express");
 const bodyParser = require('body-parser');
 const app = express();
-const fs = require("fs");
 const userController = require("./controllers/userController2");
 
-
+//Connect app to user controller
 app.use(express.json());
 app.use("/user", userController);
 
-function writeTo(file, data) {
-  fs.writeFile(file, JSON.stringify(data), "utf8", (err) => {
-    throw err;
-  });
-}
-
-function readFrom(file) {
-  if (fs.existsSync(file)) {
-    let data = fs.readFileSync(file, "utf-8");
-    data = JSON.parse(data);
-    return data;
-  }
-}
-
-
+//Port that app is listening to 
 app.listen(3000, () => {
   console.log("Project is running!");
 })
