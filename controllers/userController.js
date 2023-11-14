@@ -2,7 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const user = express();
 module.exports = user;
-// const { MongoClient } = require('mongodb');
+const { MongoClient } = require('mongodb');
 
 function writeTo(file, data) {
   fs.writeFile(file, JSON.stringify(data), "utf8", (err) => {
@@ -25,7 +25,7 @@ user.use(express.json());
 
 user.post('/register', async (req, res) => {
 
-  // const client = new MongoClient('mongodb://localhost:27017');
+  const client = new MongoClient('mongodb://0.0.0.0:27017');
 
   try {
 
@@ -39,27 +39,27 @@ user.post('/register', async (req, res) => {
 
       if(email != "" && password != "")
       {
-            // client.connect();
-            // const database = client.db('test');
-            // const usersCollection = database.collection('users');
+            client.connect();
+            const database = client.db('test');
+            const usersCollection = database.collection('users');
 
-            // const user = await usersCollection.findOne({email});
-            const file = "./users.json";
-            // const user = await usersCollection.findOne({ email });
-            let data = readFrom(file)
-            console.log(data)
+            const user = await usersCollection.findOne({email});
+            // const file = "./users.json";
+            
+            // let data = readFrom(file)
+            // console.log(data)
 
-            const isEmailRegistered = (email) => {
-              return data.some(user => user.email === email);
+            // const isEmailRegistered = (email) => {
+            //   return data.some(user => user.email === email);
               
-            };
+            // };
             
             
-            console.log(isEmailRegistered(email))
+            // console.log(isEmailRegistered(email))
 
-            if (isEmailRegistered(email)) {
+            // if (isEmailRegistered(email)) {
            
-            // if (user) {
+            if (user) {
                 //if user found, cookie message = username/email already exists
                 res.send('Email already exists!');
                 //res.cookie('message', 'Email already exists!');
@@ -71,11 +71,11 @@ user.post('/register', async (req, res) => {
 
                 //Append the new user to the existing data
                 console.log(newUser)
-                data.push(newUser);
+                // data.push(newUser);
 
                 // Write the updated data back to the file
-                // await usersCollection.insertOne(user);
-                writeTo(file, data, res);
+                await usersCollection.insertOne(newUser);
+                // writeTo(file, data, res);
                 res.send('Account created!');
             }
       }
@@ -91,8 +91,8 @@ user.post('/register', async (req, res) => {
   } catch (err) {
       res.send(err);
       //console.error(err);
-  } //finally {
-      // await client.close();
-  // }
+  } finally {
+      await client.close();
+  }
 
 })
