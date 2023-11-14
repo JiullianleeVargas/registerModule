@@ -5,7 +5,7 @@
 const express = require("express");
 const bodyParser = require('body-parser');
 const app = express();
-const userController = require("./controllers/userController2");
+const userController = require("./controllers/userController");
 
 //Connect app to user controller
 app.use(express.json());
