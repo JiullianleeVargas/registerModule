@@ -61,10 +61,11 @@ user.post('/register', async (req, res) => {
             res.send("Invalid email input!");
         }
 
-          //Connect to DB named 'task_management' and collection named 'users'
+          //Connect to DB named 'database_name' and collection named 'collection_name'
+          // These names are placeholders, here you will put the actual name of your database and collection
           client.connect();
-          const database = client.db('task_management');
-          const usersCollection = database.collection('users');
+          const database = client.db('database_name');
+          const usersCollection = database.collection('collection_name');
 
           //Find query for that specific user given the email
           const user = await usersCollection.findOne({ email });
